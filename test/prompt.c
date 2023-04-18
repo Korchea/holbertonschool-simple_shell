@@ -2,29 +2,33 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 /**
  *
  */
 int main(int argc, char *const *argv[], char *const *envp[])
 {
-	char *command;
+	char *cmd;
+	const char *path;
 	size_t size;
 	int r;
 
-	command = NULL;
+	cmd = NULL;
 	size = 0;
 
 	while (1)
 	{
 		printf("$ ");
-		r = getline(&command, &size, stdin);
+		r = getline(&cmd, &size, stdin);
 		if (r == -1)
 		{
 			break;
 		}
-		printf("%s", command);
-		execve (command, argv[0], *envp);
+		printf("%s", cmd);
+		path = getcwd(cmd, size);
+		strcat(cmd, path);
+		execve (path, argv[0], *envp);
 	}
-	free(command);
+	free(cmd);
 	return (0);
 }
