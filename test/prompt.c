@@ -5,7 +5,7 @@
 /**
  *
  */
-int main(void)
+int main(int argc, char *const *argv[], char *const *envp[])
 {
 	char *command;
 	size_t size;
@@ -23,6 +23,7 @@ int main(void)
 			break;
 		}
 		printf("%s", command);
+		execve (command, argv[0], *envp);
 	}
 	free(command);
 	return (0);
