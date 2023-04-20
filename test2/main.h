@@ -8,3 +8,4 @@
  */
 
 extern char **environ;
+char *_environ(char *envp);

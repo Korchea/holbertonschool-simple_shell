@@ -1,9 +1,8 @@
 #include "main.h"
 #include <string.h>
 /**
- *
  */
-int main()
+char *_environ(char *envp)
 {
 	int i;
 	char *pathname = "PATH=";
@@ -17,9 +16,10 @@ int main()
 		{
 			if(strstr(environ[i], pathname))
 			{
-				printf ("%s\n", environ[i]);
+				envp = environ[i];
+				return (envp);
 			}
 		}
 	}
-		return (0);
+		return (NULL);
 }

@@ -4,11 +4,13 @@
  *
  */
 
-int main(int argc, char *argv, c)
+int main(int argc, char *argv[], char *envp)
 {
-	char *cmd, *tok, *argv[10];
+	char *cmd, *tok;
 	size_t size = 0;
 	int r, i = 0;
+
+ 
 	
 
 	while (1)
@@ -25,7 +27,7 @@ int main(int argc, char *argv, c)
 			i++;
 		}
 		printf("Before execve\n");
-		if (execve(argv[0], argv, *env) == -1)
+		if (execve(argv[0], argv, (char *const *)envp) == -1)
 		{
 			perror("Error:");
 		}
