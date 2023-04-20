@@ -1,25 +1,22 @@
-#include <stdio.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
+#include "main.h"
 
 /**
  *
  */
 
-int main(void)
+int main(int argc, char *argv, c)
 {
 	char *cmd, *tok, *argv[10];
 	size_t size = 0;
 	int r, i = 0;
+	
 
 	while (1)
 	{
 		printf("$ ");
 		r = getline(&cmd, &size, stdin);
 		if (r < 0)
-			return (-1);
+			break;
 		tok = strtok(cmd, " ");
 		while(tok != NULL)
 		{
@@ -28,7 +25,7 @@ int main(void)
 			i++;
 		}
 		printf("Before execve\n");
-		if (execve(argv[0], argv, NULL) == -1)
+		if (execve(argv[0], argv, *env) == -1)
 		{
 			perror("Error:");
 		}
