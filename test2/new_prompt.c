@@ -19,11 +19,12 @@ int main(void)
 		printf("$ ");
 		r = getline(&cmd, &size, stdin);
 		if (r < 0)
-			return (-1);
+			break;
 		tok = strtok(cmd, " ");
 		while(tok != NULL)
 		{
 			argv[i] = tok;
+			printf(" %s\n", tok);
 			tok = strtok(NULL, " ");
 			i++;
 		}
