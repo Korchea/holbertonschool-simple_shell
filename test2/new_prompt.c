@@ -23,6 +23,7 @@ int main(int argc, char *argv[], char *envp)
 		while(tok != NULL)
 		{
 			argv[i] = tok;
+			printf(" %s\n", tok);
 			tok = strtok(NULL, " ");
 			i++;
 		}
