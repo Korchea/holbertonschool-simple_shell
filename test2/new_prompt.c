@@ -6,33 +6,20 @@
 
 int main(int argc, char *argv[], char *envp)
 {
-	char *cmd, *tok;
+	char *cmd = NULL, *tok = NULL;
 	size_t size = 0;
-	int r, i = 0;
+	int i = 0;
 
- 
-	
-
-	while (1)
+	while (printf("$ ") && getline(&cmd, &size, stdin) != -1)
 	{
-		printf("$ ");
-		r = getline(&cmd, &size, stdin);
-		if (r < 0)
-			break;
-		tok = strtok(cmd, " ");
+		tok = strtok(cmd, "\n"), tok = strtok(cmd, " ");
 		while(tok != NULL)
 		{
 			argv[i] = tok;
-			printf(" %s\n", tok);
 			tok = strtok(NULL, " ");
 			i++;
 		}
-		printf("Before execve\n");
-		if (execve(argv[0], argv, (char *const *)envp) == -1)
-		{
-			perror("Error:");
-		}
-		printf("After execve\n");
+		execve(argv[0], argv, NULL);
 	}
 	free(cmd);
 	return (0);

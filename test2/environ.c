@@ -2,7 +2,7 @@
 #include <string.h>
 /**
  */
-char *_environ(char *envp)
+char *main(char *envp)
 {
 	int i;
 	char *pathname = "PATH=";
@@ -17,6 +17,8 @@ char *_environ(char *envp)
 			if(strstr(environ[i], pathname))
 			{
 				envp = environ[i];
+				envp = _strncpy(envp, envp, 5);
+				printf("%s\n", envp);
 				return (envp);
 			}
 		}
