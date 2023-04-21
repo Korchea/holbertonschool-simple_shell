@@ -14,6 +14,14 @@ int main(void)
 	{
 		if (fork() == 0)
 		{
+			if (argv != NULL)
+			{
+				for (i = 0; argv[i] != NULL; i++)
+				{
+					free(argv[i]);
+				}
+				free(argv);
+			}
 			cmd_cpy = strdup(cmd);
 			tok = strtok(cmd, " \n");
 			while (tok != NULL)
@@ -37,15 +45,14 @@ int main(void)
 		else
 		{
 			wait(NULL);
-			/*for (; i >= 0; i--)
-				free(argv[i]);
-			if (argv != NULL)
-			{
-				free(argv);
-			}*/
 		}
 	}
-	
+	/*for (; argv[i] != NULL; i--)
+		free(argv[i]);
+	if (argv != NULL)
+	{
+		free(argv);
+	}*/
 	free(cmd);
 	return (0);
 }
