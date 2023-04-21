@@ -2,24 +2,27 @@
 #include <string.h>
 /**
  */
-char *main(char *envp)
+
+char **_getenv(char *envp)
 {
 	int i;
 	char *pathname = "PATH=";
-	char *separator = " ";
+	/*char *separator = " ";
 	char *token;
 
-	token = strtok(pathname, separator);
+	token = strtok(pathname, separator);*/
 	while(environ[i])
 	{
 		for(i = 0; environ[i] != NULL; i++)
 		{
 			if(strstr(environ[i], pathname))
 			{
-				envp = environ[i];
+				return (&environ[i]);
+				/*envp = environ[i];
 				envp = _strncpy(envp, envp, 5);
-				printf("%s\n", envp);
-				return (envp);
+				printf("PATH : %s\n", envp);
+				printf("PATH : %s\n", env);
+				return (envp);*/
 			}
 		}
 	}
