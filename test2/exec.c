@@ -6,7 +6,7 @@
  *
  * Return: Always 0.
  */
-int main(void)
+int algo(void)
 {
     char *argv[] = {"/bin/ls", "-l", "/usr/", NULL};
 

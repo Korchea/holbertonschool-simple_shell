@@ -4,9 +4,9 @@
  * 
  */
 
-char **gettok(char *cmd, char *argv[])
+char **gettok(char *cmd)
 {
-    char *tok = NULL, *cmd_cpy = strdup(cmd);
+   /* char *tok = NULL, *cmd_cpy = strdup(cmd), *argv;
     int n_tok = 0, i = 0;
 
     tok = strtok(cmd, " \n");
@@ -25,5 +25,5 @@ char **gettok(char *cmd, char *argv[])
     }
     argv[i] = NULL;
     free(cmd_cpy);
-    return (argv);
+    return (argv);*/
 }

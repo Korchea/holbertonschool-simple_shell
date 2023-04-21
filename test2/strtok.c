@@ -3,7 +3,7 @@
 /**
  *
  */
-int main()
+int _strtok()
 {
 	char str[80] = "Print something mf";
 	const char s[2] = " ";
