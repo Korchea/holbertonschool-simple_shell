@@ -51,26 +51,32 @@ char *_getenv(char *pathname)
 
 int main(int argc, char **argv, char *envp[])
 {
-    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, *tok[3] = {}, *env_aux = NULL, *_env[2];
-    const char *taux = " ";
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok, *_env[] = {_getenv("PATH"), NULL};
+    const char *taux = " \n";
     size_t size = 0;
-    int i = 0;
+    int i = 0, n_token = 0;
       
-    _env[0] = _getenv("PATH");
-    _env[1] = NULL;
     while (printf("$ ") && getline(&cmd, &size, stdin) != -1)
-    {     
+    {
         cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
-        i = 0;
+        n_token = 0;
         while (token != NULL)
-        {
-            tok[i] = token;
-            token = strtok(NULL, taux);
-            i++;
-        }
-        
-        tok[i] = "\0";
+			{
+				n_token++;
+				token = strtok(NULL, taux);
+			}
+		n_token++;
+        tok = malloc(sizeof(char *) * n_token);
+        token = strtok(cmd_cpy, taux);
+        for (i = 0; token != NULL; i++)
+			{
+				tok[i] = malloc(sizeof(char) * strlen(token));
+				strcpy(tok[i], token);
+				token = strtok(NULL, taux);
+			}
+        tok[i] = NULL;
+        free(cmd_cpy);
         if (execve(tok[0], tok, _env) == -1)
         {
           perror("Error");
@@ -79,5 +85,5 @@ int main(int argc, char **argv, char *envp[])
         
     }
     free(cmd);
-    return (0);
+    return (EXIT_SUCCESS);
 }
