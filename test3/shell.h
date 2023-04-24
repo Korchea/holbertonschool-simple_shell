@@ -7,3 +7,5 @@
 #include <stdint.h>
 
 extern char **environ;
+char *_getenv(char *pathname);
+char *_strncpy(char *dest, char *src, int n);
