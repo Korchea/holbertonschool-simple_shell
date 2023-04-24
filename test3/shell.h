@@ -9,3 +9,4 @@
 extern char **environ;
 char *_getenv(char *pathname);
 char *_strncpy(char *dest, char *src, int n);
+int main(int argc, char **argv, char *envp[]);

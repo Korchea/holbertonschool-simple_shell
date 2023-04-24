@@ -21,7 +21,6 @@ char *_strncpy(char *dest, char *src, int n)
 	dest[j] = '\0';
 	return (dest);
 }
-
 /**
  * 
  */
@@ -36,7 +35,7 @@ char *_getenv(char *pathname)
 		if (strstr(environ[i], pathname))
 		{
 			envp = environ[i];
-			envp = _strncpy(envp, envp, 5);
+			envp = _strncpy(envp, environ[i], 5);
 			return (envp);
 		}
 	}

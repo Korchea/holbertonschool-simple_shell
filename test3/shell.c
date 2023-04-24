@@ -38,51 +38,45 @@ char *_getenv(char *pathname)
 		{
 			envp = environ[i];
 			envp = _strncpy(envp, envp, 5);
-			return (envp);
+            return (envp);
 		}
+        
 	}
 	return (NULL);
 }
 
 /**
- * 
- */
+ */ 
+ 
 
-int main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char *envp[])
 {
-    char *cmd = NULL, *taux = " ", *token = NULL, *tok[8] = {}, *env_aux = NULL, *_env[8] = {};
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, *tok[3] = {}, *env_aux = NULL, *_env[2];
+    const char *taux = " ";
     size_t size = 0;
-    int i = 0, j = 0, count = 0;
-
-    env_aux = strtok(_getenv("PATH"), ":");
-        while (env_aux != NULL)
-        {
-            _env[j] = env_aux;
-            env_aux = strtok(NULL, ":");
-            j++;
-        }
-        _env[j] = "\0";
+    int i = 0;
+      
+    _env[0] = _getenv("PATH");
+    _env[1] = NULL;
     while (printf("$ ") && getline(&cmd, &size, stdin) != -1)
     {     
+        cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         i = 0;
         while (token != NULL)
         {
             tok[i] = token;
-            /*printf("%s\n", tok[i]);*/
             token = strtok(NULL, taux);
             i++;
         }
-        count = j;
-        for (; count >= 0; count--)
-        {
-            if (strstr(tok[0], _env[count]))
-            {
-                tok[0] = _strncpy(tok[0], tok[0], strlen(_env[count]));
-            }
-        }
+        
         tok[i] = "\0";
-        execve(tok[0], tok, _env);
+        if (execve(tok[0], tok, _env) == -1)
+        {
+          perror("Error");
+        }
+        
+        
     }
     free(cmd);
     return (0);
