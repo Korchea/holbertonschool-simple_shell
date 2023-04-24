@@ -52,7 +52,7 @@ int main(int argc, char **argv, char **envp)
 {
     char *cmd = NULL, *taux = " ", *token = NULL, *tok[8] = {}, *env_aux = NULL, *_env[8] = {};
     size_t size = 0;
-    int i = 0, j = 0;
+    int i = 0, j = 0, count = 0;
 
     env_aux = strtok(_getenv("PATH"), ":");
         while (env_aux != NULL)
@@ -63,7 +63,7 @@ int main(int argc, char **argv, char **envp)
         }
         _env[j] = "\0";
     while (printf("$ ") && getline(&cmd, &size, stdin) != -1)
-    {
+    {     
         token = strtok(cmd, taux);
         i = 0;
         while (token != NULL)
@@ -73,11 +73,12 @@ int main(int argc, char **argv, char **envp)
             token = strtok(NULL, taux);
             i++;
         }
-        for (; j >= 0; j--)
+        count = j;
+        for (; count >= 0; count--)
         {
-            if (strstr(tok[0], _env[j]))
+            if (strstr(tok[0], _env[count]))
             {
-                tok[0] = _strncpy(tok[0], tok[0], strlen(_env[j]));
+                tok[0] = _strncpy(tok[0], tok[0], strlen(_env[count]));
             }
         }
         tok[i] = "\0";
