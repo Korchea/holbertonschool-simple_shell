@@ -12,8 +12,8 @@ int main(void)
 
 	while (printf("$ ") && getline(&cmd, &size, stdin) != -1)
 	{
-		if (fork() == 0)
-		{
+		/*if (fork() == 0)
+		{*/
 			if (argv != NULL)
 			{
 				for (i = 0; argv[i] != NULL; i++)
@@ -41,11 +41,11 @@ int main(void)
 			argv[i] = NULL;
 			free(cmd_cpy);
 			execve(argv[0], argv, _env);
-		}
+		/*}
 		else
 		{
 			wait(NULL);
-		}
+		}*/
 	}
 	/*for (; argv[i] != NULL; i--)
 		free(argv[i]);
