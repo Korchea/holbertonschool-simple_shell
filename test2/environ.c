@@ -16,6 +16,7 @@ char *_getenv(char *pathname)
 			envp = _strncpy(envp, envp, 5);
 			return (envp);
 		}
+		printf("%s", pathname);
 	}
 	return (NULL);
 }

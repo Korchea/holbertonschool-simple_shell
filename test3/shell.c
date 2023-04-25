@@ -46,19 +46,48 @@ char *_getenv(char *pathname)
 }
 
 /**
+ * 
+ */
+
+void function_call(char **tok)
+{
+	char *_env[] = {_getenv("PATH"), NULL};
+
+	execve(tok[0], tok, _env);
+}
+
+/**
  */ 
  
 
 int main(int argc, char **argv, char *envp[])
 {
-    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok, *_env[] = {_getenv("PATH"), NULL};
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok;
     const char *taux = " \n";
     size_t size = 0;
-    int i = 0, n_token = 0;
-      
-    while (printf("$ ") && getline(&cmd, &size, stdin) != -1)
+    int i = 0, n_token = 0, line_error = 0;
+	pid_t pid;
+    
+    while (1)
     {
-        cmd_cpy = strdup(cmd);
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("Error:");
+			return (EXIT_FAILURE);
+		}
+		if (pid > 0)
+		{
+			function_call(tok);
+			wait(NULL);
+		}
+		else
+		{
+		printf("$ ");
+		line_error = getline(&cmd, &size, stdin);
+		if (line_error == -1)
+			break;
+		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
         while (token != NULL)
@@ -77,10 +106,14 @@ int main(int argc, char **argv, char *envp[])
 			}
         tok[i] = NULL;
         free(cmd_cpy);
+<<<<<<< HEAD
         if (execve(tok[0], tok, _env) == -1)
         {
           perror("Error");
         } 
+=======
+		}
+>>>>>>> aba1d9f9267d846a61e620e15e6a12819080c471
     }
     free(cmd);
     return (EXIT_SUCCESS);
