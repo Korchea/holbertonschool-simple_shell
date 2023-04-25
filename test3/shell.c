@@ -78,8 +78,6 @@ int main(int argc, char **argv, char *envp[])
 		}
 		if (pid > 0)
 		{
-			if (line_error == -1)
-				break;
 			function_call(tok);
 			wait(NULL);
 		}
