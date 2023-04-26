@@ -81,12 +81,12 @@ int main(int argc, char **argv, char *envp[])
 			function_call(tok);
 			wait(NULL);
 		}
-		else
-		{
 		printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
 		if (line_error == -1)
-			break;
+				break;
+		else
+		{
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
@@ -106,14 +106,7 @@ int main(int argc, char **argv, char *envp[])
 			}
         tok[i] = NULL;
         free(cmd_cpy);
-<<<<<<< HEAD
-        if (execve(tok[0], tok, _env) == -1)
-        {
-          perror("Error");
-        } 
-=======
 		}
->>>>>>> aba1d9f9267d846a61e620e15e6a12819080c471
     }
     free(cmd);
     return (EXIT_SUCCESS);
