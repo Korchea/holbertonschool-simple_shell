@@ -14,13 +14,7 @@ The second form:
 $ ./hsh
 ($) /bin/ls
 ```
-| Conversion specifier | Description					|
-|-----|:---------------------------------------------------------------|
-| `%c` | It represent a variable of type char.				|
-| `%s` | It represent a variable of type `char *`, commonly called string. |
-| `%%` | It is used to remplace it with a '%'.				|
-| `%d` | It represent a variable of type int in decimal.		|
-| `%i` | It represent a variable of type int.				|
+
 
 In this project we use (((PONER NUMERO))) functions, those functions are main, _getenv, _strlen, _strncpy and function_call.
 - `int main(int argc, char **argv, char *envp[])`: It is our principal function, here we don't recive enything(((((ME QUEDE ACA))))). This function creates the list of the variables given in the ellipsis, traverses the string format, look for the conversion specifiers and prints the string format, if it recognise a % in format it call the functon get_format and it returns the number of characters printed.
@@ -32,48 +26,8 @@ In this project we use (((PONER NUMERO))) functions, those functions are main, _
 - `void print_int(long int n, int *count)`: In this function we print the integer and if it is less than 0 first print a '-'.
 - `unsigned int _strlen(char *s)`: In this function we return the length of a string.
 
-### Different limit cases of the function:
-```
-Input:
-_printf(NULL);
-Output:
-```
-```
-Input:
-_printf("Let´s try to printf a simple sentence.");
-Output:
-Let´s try to printf a simple sentence.
-```
-```
-Input:
-_printf("%D\n", INT_MIN);
-Output:
--2147483648
-```
-```
-Input:
-_printf("Hi, %s\n", "Betty");
-Output:
-Hi, Betty
-```
-```
-Input:
-_printf("If you %s\n", NULL);
-Output:
-If you (null)
-```
-```
-Input:
-_printf("This is a char %c\n", 'H');
-Output:
-This is a char H
-```
-```
-Input:
-_printf("%% % \n");
-Output:
-% %
-```
+### Different limit cases of the shell:
+
 
 ### To use that function we need to:
 - Clone the repository.
