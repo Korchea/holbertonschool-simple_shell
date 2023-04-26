@@ -78,9 +78,9 @@ int main(int argc, char **argv, char *envp[])
 		}
 		if (pid > 0)
 		{
-			function_call(tok);
-			wait(&status);
-			
+			if (tok != NULL)
+				function_call(tok);
+			wait(&status);		
 		}
 		else
 		{
@@ -97,11 +97,11 @@ int main(int argc, char **argv, char *envp[])
 				token = strtok(NULL, taux);
 			}
 		n_token++;
-        tok = realloc(tok, sizeof(char *) * n_token);
+        tok = malloc(sizeof(char *) * n_token);
         token = strtok(cmd_cpy, taux);
         for (i = 0; token != NULL; i++)
 			{
-				tok[i] = realloc(tok, sizeof(char) * strlen(token));
+				tok[i] = malloc(sizeof(char) * strlen(token));
 				strcpy(tok[i], token);
 				token = strtok(NULL, taux);
 			}
@@ -109,9 +109,16 @@ int main(int argc, char **argv, char *envp[])
         free(cmd_cpy);
 		}
     }
-	for (i = 0; i <= n_token; i++)
-		free(tok[i]);
-	free(tok);
+	if (tok != NULL)
+	{
+		for (i = 0; tok[i] && i <= n_token; i++)
+			free(tok[i]);
+		free(tok);
+	}
     free(cmd);
     return (EXIT_SUCCESS);
 }
+
+
+
+/*isatty - Recurdame me tengo que marchar, recuerdame.*/
