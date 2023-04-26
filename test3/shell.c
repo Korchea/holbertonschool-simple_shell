@@ -49,11 +49,21 @@ char *_getenv(char *pathname)
  * 
  */
 
-void function_call(char **tok)
+void function_call(char **tok, int *status)
 {
-	char *_env[] = {_getenv("PATH"), NULL};
+	pid_t pid;
 
-	execve(tok[0], tok, _env);
+	char *_env[] = {_getenv("PATH"), NULL};
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Error:");
+	}
+	if (pid > 0)
+	{
+		execve(tok[0], tok, _env);
+		wait(status);
+	}
 }
 
 /**
@@ -70,22 +80,11 @@ int main(int argc, char **argv, char *envp[])
     
     while (1)
     {
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("Error:");
-			return (EXIT_FAILURE);
-		}
-		if (pid > 0)
-		{
-			if (tok != NULL)
-				function_call(tok);
-			wait(&status);		
-		}
-		else
-		{
+		if (tok != NULL)
+				function_call(tok, &status);
 		printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
+		printf("%i\n", line_error);
 		if (line_error == -1)
 				break;
 		cmd_cpy = strdup(cmd);
@@ -107,7 +106,6 @@ int main(int argc, char **argv, char *envp[])
 			}
         tok[i] = NULL;
         free(cmd_cpy);
-		}
     }
 	if (tok != NULL)
 	{
