@@ -10,7 +10,8 @@ The first form:
 $ echo "/bin/ls" | ./hsh
 ```
 The second form: 
-```$ ./hsh
+```
+$ ./hsh
 ($) /bin/ls
 ```
 | Conversion specifier | Description					|
