@@ -81,12 +81,12 @@ int main(int argc, char **argv, char *envp[])
 			function_call(tok);
 			wait(NULL);
 		}
+		else
+		{
 		printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
 		if (line_error == -1)
 				break;
-		else
-		{
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
