@@ -62,10 +62,10 @@ void function_call(char **tok)
 
 int main(int argc, char **argv, char *envp[])
 {
-    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok;
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
     const char *taux = " \n";
     size_t size = 0;
-    int i = 0, n_token = 0, line_error = 0;
+    int i = 0, n_token = 0, line_error = 0, status;
 	pid_t pid;
     
     while (1)
@@ -78,8 +78,9 @@ int main(int argc, char **argv, char *envp[])
 		}
 		if (pid > 0)
 		{
-			function_call(tok);
-			wait(NULL);
+			if (tok != NULL)
+				function_call(tok);
+			wait(&status);		
 		}
 		else
 		{
@@ -108,6 +109,16 @@ int main(int argc, char **argv, char *envp[])
         free(cmd_cpy);
 		}
     }
+	if (tok != NULL)
+	{
+		for (i = 0; tok[i] && i <= n_token; i++)
+			free(tok[i]);
+		free(tok);
+	}
     free(cmd);
     return (EXIT_SUCCESS);
 }
+
+
+
+/*isatty - Recurdame me tengo que marchar, recuerdame.*/
