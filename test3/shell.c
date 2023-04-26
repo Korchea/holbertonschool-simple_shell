@@ -52,13 +52,24 @@ char *_getenv(char *pathname)
 void function_call(char **tok, int *status)
 {
 	pid_t pid;
+
 	
-	char *_env[] = {_getenv("PATH"), NULL};
-	
-	if(execve(tok[0], tok, _env) == -1)
-		{
-			perror("Error");
-		}
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Error:");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		char *_env[] = {_getenv("PATH"), NULL};
+		execve(tok[0], tok, _env);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		wait(status);
+	}
 }
 /**
  */ 
@@ -74,16 +85,10 @@ int main(int argc, char **argv, char *envp[])
     
 	while (1)
     {
-		if (fork() == -1)
-		{
-			perror("Error:");
-		}
-		if (fork() > 0)
-		{
-			printf("$ ");
-			line_error = getline(&cmd, &size, stdin);
-			printf("%i\n", line_error);
-			if (line_error == -1)
+		printf("$ ");
+		line_error = getline(&cmd, &size, stdin);
+		fflush(stdin);
+		if (line_error == -1)
 				break;
 			wait(&status);
 			if (WIFEXITED(status) == 0)
@@ -113,16 +118,16 @@ int main(int argc, char **argv, char *envp[])
 			}
         tok[i] = NULL;
         free(cmd_cpy);
-		}
 		if (tok != NULL)
 			function_call(tok, &status);
-    }
-	if (tok != NULL)
+		if (tok != NULL)
 	{
 		for (i = 0; tok[i] && i <= n_token; i++)
 			free(tok[i]);
 		free(tok);
 	}
+    }
+	
     free(cmd);
     return (EXIT_SUCCESS);
 }
