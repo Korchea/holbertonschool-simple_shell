@@ -62,10 +62,10 @@ void function_call(char **tok)
 
 int main(int argc, char **argv, char *envp[])
 {
-    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok;
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
     const char *taux = " \n";
     size_t size = 0;
-    int i = 0, n_token = 0, line_error = 0;
+    int i = 0, n_token = 0, line_error = 0, status;
 	pid_t pid;
     
     while (1)
@@ -79,7 +79,8 @@ int main(int argc, char **argv, char *envp[])
 		if (pid > 0)
 		{
 			function_call(tok);
-			wait(NULL);
+			wait(&status);
+			
 		}
 		else
 		{
@@ -96,11 +97,11 @@ int main(int argc, char **argv, char *envp[])
 				token = strtok(NULL, taux);
 			}
 		n_token++;
-        tok = malloc(sizeof(char *) * n_token);
+        tok = realloc(tok, sizeof(char *) * n_token);
         token = strtok(cmd_cpy, taux);
         for (i = 0; token != NULL; i++)
 			{
-				tok[i] = malloc(sizeof(char) * strlen(token));
+				tok[i] = realloc(tok, sizeof(char) * strlen(token));
 				strcpy(tok[i], token);
 				token = strtok(NULL, taux);
 			}
@@ -108,6 +109,9 @@ int main(int argc, char **argv, char *envp[])
         free(cmd_cpy);
 		}
     }
+	for (i = 0; i <= n_token; i++)
+		free(tok[i]);
+	free(tok);
     free(cmd);
     return (EXIT_SUCCESS);
 }
