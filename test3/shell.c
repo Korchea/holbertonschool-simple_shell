@@ -73,34 +73,42 @@ void function_call(char **tok, int *status)
 
 /**
  */ 
- char *_witch(char *cmd)
+ void _witch(char **cmd)
  {
 	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
 	 struct stat st = {0};
 
 	 directory = strtok(path, ":");
-
+	 
 	 while (directory)
 	 {
-		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(cmd) + 2));
+		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(*cmd) + 2));
 
 		 strcpy(fullpath, directory);
 		 strcat(fullpath, "/");
-		 strcat(fullpath, cmd);
-
+		
+		 strcat(fullpath, *cmd);
+		 stat(fullpath, &st);
+		 printf("%s\n", fullpath);
+		 
+		 
 		 if (stat(fullpath, &st) == 0)
 		 {
+			 printf("%s\n", *cmd);
 			 free(path);
-			 return (fullpath);
+			 *cmd = malloc(sizeof(char) * strlen(fullpath));
+			 *cmd = fullpath;
+			 break;
 		 }
 		 else
 		 {
 			 directory = strtok(NULL, ":");
 		 }
 	 }
-	 free(path);
-	 free(fullpath);
-	 return (cmd);
+	 if (fullpath != NULL)
+	 {
+	 	free(fullpath);
+	 }
  }
 
 int main(int argc, char **argv, char *envp[])
@@ -118,7 +126,7 @@ int main(int argc, char **argv, char *envp[])
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		cmd = _witch(cmd);
+		_witch(&cmd);
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
