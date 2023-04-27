@@ -70,14 +70,42 @@ void function_call(char **tok, int *status)
 		wait(status);
 	}
 }
+/*
+char *which(const char *cmd)
+{
+	char *path = _getenv("PATH");
+	if (path == NULL)
+		return NULL;
 
+	char *directory = strtok(path, ":");
+	while (directory != NULL)
+	{
+		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
+		if (fullpath == NULL)
+		{
+			perror("Memory allocation error");
+			exit(EXIT_FAILURE);
+		}
+
+		strcpy(fullpath, directory);
+		strcat(fullpath, "/");
+		strcat(fullpath, cmd);
+
+		struct stat st;
+		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
+			return fullpath;
+
+		free(fullpath);
+		directory = strtok(NULL, ":");
+	}
+
+	return (NULL);
+}*/
 /**
  */ 
- void _witch(char **cmd)
+void _witch(char **cmd)
  {
 	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
-	 struct stat st = {0};
-	 unsigned int stat_value;
 
 	 directory = strtok(path, ":");
 	
@@ -89,14 +117,13 @@ void function_call(char **tok, int *status)
 		 strcat(fullpath, "/");
 		 strcat(fullpath, *cmd);
 		 printf("%s", fullpath);
-		 stat_value = stat(fullpath, &st);
-		 printf("%u\n", stat_value);
-		 if (stat_value == 0 && S_ISREG(st.st_rdev))
+		 struct stat st = {0};
+		 if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
 		 {
 			 printf("%s\n", *cmd);
 			 free(path);
-			 *cmd = malloc(sizeof(char) * strlen(fullpath));
-			 *cmd = fullpath;
+			 *cmd = malloc(sizeof(char) * strlen(fullpath) + 1);
+			 strcpy(*cmd, fullpath);
 			 break;
 		 }
 		 else
@@ -119,14 +146,19 @@ int main(int argc, char **argv, char *envp[])
     int i = 0, n_token = 0, line_error = 0, status;
 	pid_t pid;
     
+	
     while (1)
     {
-		printf("$ ");
+		if (isatty(STDIN_FILENO) != 1)
+			;
+		else
+			printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		//_witch(&cmd);
+		//cmd = which(cmd);
+		_witch(&cmd);
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
@@ -160,6 +192,3 @@ int main(int argc, char **argv, char *envp[])
     return (EXIT_SUCCESS);
 }
 
-
-
-/*isatty - Recurdame me tengo que marchar, recuerdame.*/
