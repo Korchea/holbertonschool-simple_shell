@@ -73,42 +73,47 @@ void function_call(char **tok, int *status)
 
 /**
  */ 
- void _witch(char **cmd)
+ void _witch(char *cmd)
  {
-	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
-	 struct stat st = {0};
-	 unsigned int stat_value;
+	char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
+	if (path == NULL || *path == '\0')
+	{
+		path = "/usr/bin:/bin:/usr/sbin:/sbin";
+	}
+	struct stat st = {0};
+	unsigned int stat_value;
 
-	 directory = strtok(path, ":");
-	
-	 while (directory)
-	 {
-		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(*cmd) + 2));
+	directory = strtok(path, ":");
+	printf("path = %s\n", path);
+	while (directory)
+	{
+		fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(cmd) + 2));
 
-		 strcpy(fullpath, directory);
-		 strcat(fullpath, "/");
-		 strcat(fullpath, *cmd);
-		 printf("%s", fullpath);
-		 stat_value = stat(fullpath, &st);
-		 printf("%u\n", stat_value);
-		 if (stat_value == 0 && S_ISREG(st.st_rdev))
-		 {
-			 printf("%s\n", *cmd);
-			 free(path);
-			 *cmd = malloc(sizeof(char) * strlen(fullpath));
-			 *cmd = fullpath;
-			 break;
-		 }
-		 else
-		 {
-			 directory = strtok(NULL, ":");
-		 }
-		 printf("stat returned %d, errno = %d\n", stat(fullpath, &st), errno);
-	 }
-	 if (fullpath != NULL)
-	 {
-	 	free(fullpath);
-	 }
+		strcpy(fullpath, directory);
+		strcat(fullpath, "/");
+		strcat(fullpath, cmd);
+		/* printf("%s", fullpath); */
+		stat_value = stat(fullpath, &st);
+
+		if (stat_value == 0 && S_ISREG(st.st_mode))
+		{
+			printf("stat returned %u, st_mode = %o\n", stat_value, st.st_mode);
+			printf("%s\n", cmd);
+			free(path);
+			cmd = malloc(sizeof(char) * strlen(fullpath) + 1);
+			strcpy(cmd, fullpath);
+			break;
+		}
+		else
+		{
+			directory = strtok(NULL, ":");
+		}
+		printf("stat returned %d, errno = %d\n", stat(fullpath, &st), errno);
+	}
+	if (fullpath != NULL)
+	{
+		free(fullpath);
+	}
  }
 
 int main(int argc, char **argv, char *envp[])
@@ -126,7 +131,7 @@ int main(int argc, char **argv, char *envp[])
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		//_witch(&cmd);
+		_witch(cmd);
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
