@@ -77,7 +77,11 @@ char *_getenv(char *pathname)
 void function_call(char **tok, int *status)
 {
 	pid_t pid;
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> d1920276f948abf0ec582bb9b2d99d834eb88427
 	pid = fork();
 	if (pid == -1)
 	{
@@ -98,7 +102,35 @@ void function_call(char **tok, int *status)
 
 /**
  */ 
- 
+ char *_witch(char *cmd)
+ {
+	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
+	 struct stat st = {0};
+
+	 directory = strtok(path, ":");
+
+	 while (directory)
+	 {
+		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(cmd) + 2));
+
+		 strcpy(fullpath, directory);
+		 strcat(fullpath, "/");
+		 strcat(fullpath, cmd);
+
+		 if (stat(fullpath, &st) == 0)
+		 {
+			 free(path);
+			 return (fullpath);
+		 }
+		 else
+		 {
+			 directory = strtok(NULL, ":");
+		 }
+	 }
+	 free(path);
+	 free(fullpath);
+	 return (cmd);
+ }
 
 int main(int argc, char **argv, char *envp[])
 {
@@ -115,6 +147,7 @@ int main(int argc, char **argv, char *envp[])
 		fflush(stdin);
 		if (line_error == -1)
 				break;
+		cmd = _witch(cmd);
 		cmd_cpy = strdup(cmd);
     	token = strtok(cmd, taux);
         n_token = 0;
