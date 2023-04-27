@@ -73,40 +73,42 @@ void function_call(char **tok, int *status)
 
 /**
  */ 
- char *_witch(char *cmd)
+ void _witch(char **cmd)
  {
-	char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
-	struct stat st = {0};
-	char *cmd_copy = strdup(cmd);
-	char *path_copy;
-	
-	directory = strtok(path, ":");
+	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
+	 struct stat st = {0};
 
-	while (directory)
-	{
-		path_copy = strdup(directory);
-		fullpath = malloc(strlen(path_copy) + strlen(cmd_copy) + 2);
-		sprintf(fullpath, "%s/%s", path_copy, cmd_copy);
+	 directory = strtok(path, ":");
+	 
+	 while (directory)
+	 {
+		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(*cmd) + 2));
 
-		strcpy(fullpath, directory);
-		strcat(fullpath, "/");
-		strcat(fullpath, cmd);
-
-		if (stat(fullpath, &st) == 0)
-		{
-			free(path_copy);
-			free(cmd_copy);
-			return (fullpath); 
-		}
-		else
-		{
-			free(fullpath);
-			free(path_copy);
-			directory = strtok(NULL, ":");
-		}
-	}
-	free(cmd_copy);
-	return (cmd);
+		 strcpy(fullpath, directory);
+		 strcat(fullpath, "/");
+		
+		 strcat(fullpath, *cmd);
+		 stat(fullpath, &st);
+		 printf("%s\n", fullpath);
+		 
+		 
+		 if (stat(fullpath, &st) == 0)
+		 {
+			 printf("%s\n", *cmd);
+			 free(path);
+			 *cmd = malloc(sizeof(char) * strlen(fullpath));
+			 *cmd = fullpath;
+			 break;
+		 }
+		 else
+		 {
+			 directory = strtok(NULL, ":");
+		 }
+	 }
+	 if (fullpath != NULL)
+	 {
+	 	free(fullpath);
+	 }
  }
 
 int main(int argc, char **argv, char *envp[])
@@ -117,16 +119,16 @@ int main(int argc, char **argv, char *envp[])
     int i = 0, n_token = 0, line_error = 0, status;
 	pid_t pid;
     
-	while (1)
+    while (1)
     {
 		printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		cmd = _witch(cmd);
+		_witch(&cmd);
 		cmd_cpy = strdup(cmd);
-    	token = strtok(cmd, taux);
+        token = strtok(cmd, taux);
         n_token = 0;
         while (token != NULL)
 			{
@@ -153,6 +155,7 @@ int main(int argc, char **argv, char *envp[])
 		free(tok);
 	}
     }
+	
     free(cmd);
     return (EXIT_SUCCESS);
 }

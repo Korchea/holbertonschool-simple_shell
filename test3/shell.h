@@ -10,5 +10,5 @@
 extern char **environ;
 char *_getenv(char *pathname);
 char *_strncpy(char *dest, char *src, int n);
-char *_witch(char *cmd);
+void _witch(char **cmd);
 int main(int argc, char **argv, char *envp[]);
