@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <sys/stat.h>
+#include <errno.h>
 
 extern char **environ;
 char *_getenv(char *pathname);
