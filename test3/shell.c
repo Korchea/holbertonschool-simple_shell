@@ -9,6 +9,31 @@ extern char **environ;
  * @n: is an int.
  * Return: dest.
  */
+int _which(const char *cmd)
+{
+	const char *separator = ":";
+	char *_env = _getenv("PATH=");
+	char *token = strtok(_env, separator);
+	char *file = token;
+	
+    struct stat *file_stats;
+    int i, result = 0;
+
+    for(i = 0; token != NULL; i++)
+	{
+			file = token;
+			file = strcat(file, cmd);
+			result = stat(file, file_stats->st_rdev);
+			token = strtok(NULL, separator);
+	}
+	if (result == -1)
+        printf("File %s does not exist\n", file);
+    else
+    {
+        printf("File %s exists", file);
+    }
+return(0);
+}
 
 char *_strncpy(char *dest, char *src, int n)
 {
@@ -53,7 +78,6 @@ void function_call(char **tok, int *status)
 {
 	pid_t pid;
 
-	
 	pid = fork();
 	if (pid == -1)
 	{
@@ -71,6 +95,7 @@ void function_call(char **tok, int *status)
 		wait(status);
 	}
 }
+
 /**
  */ 
  
@@ -90,15 +115,6 @@ int main(int argc, char **argv, char *envp[])
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-			wait(&status);
-			if (WIFEXITED(status) == 0)
-			{
-				return (EXIT_FAILURE);
-			}
-		}
-		else
-		{
-		
 		cmd_cpy = strdup(cmd);
     	token = strtok(cmd, taux);
         n_token = 0;
@@ -127,7 +143,6 @@ int main(int argc, char **argv, char *envp[])
 		free(tok);
 	}
     }
-	
     free(cmd);
     return (EXIT_SUCCESS);
 }
