@@ -9,31 +9,6 @@ extern char **environ;
  * @n: is an int.
  * Return: dest.
  */
-int _which(const char *cmd)
-{
-	const char *separator = ":";
-	char *_env = _getenv("PATH=");
-	char *token = strtok(_env, separator);
-	char *file = token;
-	
-    struct stat *file_stats;
-    int i, result = 0;
-
-    for(i = 0; token != NULL; i++)
-	{
-			file = token;
-			file = strcat(file, cmd);
-			result = stat(file, file_stats->st_rdev);
-			token = strtok(NULL, separator);
-	}
-	if (result == -1)
-        printf("File %s does not exist\n", file);
-    else
-    {
-        printf("File %s exists", file);
-    }
-return(0);
-}
 
 char *_strncpy(char *dest, char *src, int n)
 {
@@ -77,11 +52,7 @@ char *_getenv(char *pathname)
 void function_call(char **tok, int *status)
 {
 	pid_t pid;
-<<<<<<< HEAD
-
-=======
 	
->>>>>>> d1920276f948abf0ec582bb9b2d99d834eb88427
 	pid = fork();
 	if (pid == -1)
 	{
@@ -104,32 +75,38 @@ void function_call(char **tok, int *status)
  */ 
  char *_witch(char *cmd)
  {
-	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
-	 struct stat st = {0};
+	char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
+	struct stat st = {0};
+	char *cmd_copy = strdup(cmd);
+	char *path_copy;
+	
+	directory = strtok(path, ":");
 
-	 directory = strtok(path, ":");
+	while (directory)
+	{
+		path_copy = strdup(directory);
+		fullpath = malloc(strlen(path_copy) + strlen(cmd_copy) + 2);
+		sprintf(fullpath, "%s/%s", path_copy, cmd_copy);
 
-	 while (directory)
-	 {
-		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(cmd) + 2));
+		strcpy(fullpath, directory);
+		strcat(fullpath, "/");
+		strcat(fullpath, cmd);
 
-		 strcpy(fullpath, directory);
-		 strcat(fullpath, "/");
-		 strcat(fullpath, cmd);
-
-		 if (stat(fullpath, &st) == 0)
-		 {
-			 free(path);
-			 return (fullpath);
-		 }
-		 else
-		 {
-			 directory = strtok(NULL, ":");
-		 }
-	 }
-	 free(path);
-	 free(fullpath);
-	 return (cmd);
+		if (stat(fullpath, &st) == 0)
+		{
+			free(path_copy);
+			free(cmd_copy);
+			return (fullpath); 
+		}
+		else
+		{
+			free(fullpath);
+			free(path_copy);
+			directory = strtok(NULL, ":");
+		}
+	}
+	free(cmd_copy);
+	return (cmd);
  }
 
 int main(int argc, char **argv, char *envp[])
