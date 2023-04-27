@@ -77,22 +77,21 @@ void function_call(char **tok, int *status)
  {
 	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
 	 struct stat st = {0};
+	 unsigned int stat_value;
 
 	 directory = strtok(path, ":");
-	 
+	
 	 while (directory)
 	 {
 		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(*cmd) + 2));
 
 		 strcpy(fullpath, directory);
 		 strcat(fullpath, "/");
-		
 		 strcat(fullpath, *cmd);
-		 stat(fullpath, &st);
-		 printf("%s\n", fullpath);
-		 
-		 
-		 if (stat(fullpath, &st) == 0)
+		 printf("%s", fullpath);
+		 stat_value = stat(fullpath, &st);
+		 printf("%u\n", stat_value);
+		 if (stat_value == 0 && S_ISREG(st.st_rdev))
 		 {
 			 printf("%s\n", *cmd);
 			 free(path);
@@ -104,6 +103,7 @@ void function_call(char **tok, int *status)
 		 {
 			 directory = strtok(NULL, ":");
 		 }
+		 printf("stat returned %d, errno = %d\n", stat(fullpath, &st), errno);
 	 }
 	 if (fullpath != NULL)
 	 {
@@ -126,7 +126,7 @@ int main(int argc, char **argv, char *envp[])
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		_witch(&cmd);
+		//_witch(&cmd);
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
