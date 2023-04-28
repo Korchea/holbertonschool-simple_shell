@@ -75,6 +75,7 @@ int main(void)
     const char *taux = " \n";
     size_t size = 0;
     int i = 0, n_token = 0, line_error = 0, status;
+	/*env_t *_env;*/
     
 	
     while (1)
@@ -108,8 +109,15 @@ int main(void)
 			}
         tok[i] = NULL;
         free(cmd_cpy);
+		_env = malloc(sizeof(char *) * 2);
+		for (i = 0; i < 2; i++)
+			{
+				_env[i] = malloc(sizeof(char) * strlen(_getenv("PATH")));
+				strcpy(_env[i], _getenv("PATH"));
+			}
+		_env[1] = NULL;
 		if (tok != NULL)
-			function_call(tok, &status, &_env);
+			function_call(tok, &status, _env);
 		if (_env != NULL)
 		{
 			for (i = 0; _env[i]; i++)

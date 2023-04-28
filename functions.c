@@ -47,19 +47,10 @@ char *_getenv(char *pathname)
  * 
  */
 
-void function_call(char **tok, int *status, char ***_env)
+void function_call(char **tok, int *status, char **_env)
 {
 	pid_t pid;
 	
-	*_env = malloc(sizeof(char *) * 2);
-	if (*_env == NULL)
-		exit(EXIT_FAILURE);
-	*_env[0] = malloc(sizeof(char) * strlen(_getenv("PATH")));
-	if (*_env[0] == NULL)
-		exit(EXIT_FAILURE);
-	*_env[1] = malloc(sizeof(char));
-	*_env[0] = _getenv("PATH");
-	*_env[1] = NULL;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -69,7 +60,7 @@ void function_call(char **tok, int *status, char ***_env)
 	if (pid == 0)
 	{
 		
-		execve(tok[0], tok, *_env);
+		execve(tok[0], tok, _env);
 		exit(EXIT_SUCCESS);
 	}
 	else
