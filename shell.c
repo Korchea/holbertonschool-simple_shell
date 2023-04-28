@@ -84,7 +84,7 @@ int main(void)
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		cmd_cpy = strdup(cmd);
+		cmd_cpy = _strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
         while (token != NULL)
@@ -97,8 +97,8 @@ int main(void)
         token = strtok(cmd_cpy, taux);
         for (i = 0; token != NULL; i++)
 			{
-				tok[i] = malloc(sizeof(char) * strlen(token));
-				strcpy(tok[i], token);
+				tok[i] = malloc(sizeof(char) * (strlen(token) + 1));
+				_strcpy(tok[i], token);
 				token = strtok(NULL, taux);
 			}
         tok[i] = NULL;

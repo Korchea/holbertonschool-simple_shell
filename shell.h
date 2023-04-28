@@ -19,4 +19,6 @@ char *_getenv(char *pathname);
 char *_strncpy(char *dest, char *src, int n);
 void _witch(char **cmd);
 void function_call(char **tok, int *status);
+char *_strcpy(char *dest, char *src);
+char *_strdup(char *str);
 int main(void);
