@@ -14,7 +14,7 @@ char *_strncpy(char *dest, char *src, int n)
 {
 	int i, j = 0;
 
-	for (i = n; src[i] != '\0'; i++) 
+	for (i = 0; i < n && src[i] != '\0'; i++) 
     {
 		dest[j] = src[i];
         j++;
@@ -88,7 +88,10 @@ void function_call(char **tok, int *status)
 	while (directory)
 	{
 		fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(cmd) + 2));
-
+		if (fullpath == NULL)
+		{
+			EXIT_FAILURE;
+		}
 		strcpy(fullpath, directory);
 		strcat(fullpath, "/");
 		strcat(fullpath, cmd);
@@ -150,11 +153,13 @@ int main(int argc, char **argv, char *envp[])
 				token = strtok(NULL, taux);
 			}
         tok[i] = NULL;
-        free(cmd_cpy);
+        if(cmd_cpy != NULL)
+			free(cmd_cpy);
 		if (tok != NULL)
 			function_call(tok, &status);
 		if (tok != NULL)
 	{
+		
 		for (i = 0; tok[i] && i <= n_token; i++)
 			free(tok[i]);
 		free(tok);
