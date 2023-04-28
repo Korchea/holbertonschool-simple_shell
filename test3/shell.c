@@ -49,7 +49,7 @@ void _witch(char **cmd)
 		strcat(fullpath, "/");
 		strcat(fullpath, cmd);
 		/* printf("%s", fullpath); */
-		stat_value = stat(fullpath, &st);
+		/* stat_value = stat(fullpath, &st);
 
 		 strcpy(fullpath, directory);
 		 strcat(fullpath, "/");
@@ -75,7 +75,7 @@ void _witch(char **cmd)
 	 	free(fullpath);
 	 }
  }
-*/
+*/ 
 
 int main(void)
 {

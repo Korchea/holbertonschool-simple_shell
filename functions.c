@@ -1,5 +1,5 @@
-#include "shell.h"
-/**
+/* #include "shell.h"
+/*
  * _strncpy - Check the code.
  * Description: 'Copies a string.'
  * @dest: is a string.
@@ -8,7 +8,7 @@
  * Return: dest.
  */
 
-char *_strncpy(char *dest, char *src, int n)
+/* char *_strncpy(char *dest, char *src, int n)
 {
 	int i, j = 0;
 
@@ -21,11 +21,11 @@ char *_strncpy(char *dest, char *src, int n)
 	return (dest);
 }
 
-/**
+/*
  * 
  */
 
-char *_getenv(char *pathname)
+/* char *_getenv(char *pathname)
 {
 	int i;
 	char *envp;
@@ -42,10 +42,10 @@ char *_getenv(char *pathname)
 	}
 	return (NULL);
 }
-
+ */
 /**
  * 
- */
+ *
 
 void function_call(char **tok, int *status, char ***_env)
 {
@@ -76,4 +76,4 @@ void function_call(char **tok, int *status, char ***_env)
 	{
 		wait(status);
 	}
-}
+}*/
