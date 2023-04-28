@@ -36,21 +36,13 @@ void _witch(char **cmd)
  {
 	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
 
-	directory = strtok(path, ":");
-	printf("path = %s\n", path);
-	while (directory)
-	{
-		fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(cmd) + 2));
-		if (fullpath == NULL)
-		{
-			EXIT_FAILURE;
-		}
-		strcpy(fullpath, directory);
-		strcat(fullpath, "/");
-		strcat(fullpath, cmd);
-		/* printf("%s", fullpath); */
-		stat_value = stat(fullpath, &st);
-
+	 directory = strtok(path, ":");
+	
+	 while (directory)
+	 {
+		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(*cmd) + 2));
+		 if (fullpath == NULL)
+		 	exit(EXIT_FAIL) 
 		 strcpy(fullpath, directory);
 		 strcat(fullpath, "/");
 		 strcat(fullpath, *cmd);
@@ -79,7 +71,7 @@ void _witch(char **cmd)
 
 int main(void)
 {
-    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL, **_env = NULL;
     const char *taux = " \n";
     size_t size = 0;
     int i = 0, n_token = 0, line_error = 0, status;
@@ -115,17 +107,21 @@ int main(void)
 				token = strtok(NULL, taux);
 			}
         tok[i] = NULL;
-        if(cmd_cpy != NULL)
-			free(cmd_cpy);
+        free(cmd_cpy);
 		if (tok != NULL)
-			function_call(tok, &status);
+			function_call(tok, &status, &_env);
+		if (_env != NULL)
+		{
+			for (i = 0; _env[i]; i++)
+				free(_env[i]);
+			free(_env);
+		}
 		if (tok != NULL)
-	{
-		
-		for (i = 0; tok[i] && i <= n_token; i++)
-			free(tok[i]);
-		free(tok);
-	}
+		{
+			for (i = 0; tok[i] && i <= n_token; i++)
+				free(tok[i]);
+			free(tok);
+		}
     }
 	
     free(cmd);
