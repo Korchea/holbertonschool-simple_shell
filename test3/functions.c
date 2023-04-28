@@ -7,7 +7,7 @@
  * @n: is an int.
  * Return: dest.
  */
-
+/*
 char *_strncpy(char *dest, char *src, int n)
 {
 	int i, j = 0;
@@ -19,12 +19,12 @@ char *_strncpy(char *dest, char *src, int n)
 	}
 	dest[j] = '\0';
 	return (dest);
-}
+}*/
 
 /**
  * 
  */
-
+/*
 char *_getenv(char *pathname)
 {
 	int i;
@@ -42,11 +42,11 @@ char *_getenv(char *pathname)
 	}
 	return (NULL);
 }
-
+*/
 /**
  * 
  */
-
+/*
 void function_call(char **tok, int *status)
 {
 	pid_t pid;
@@ -74,3 +74,4 @@ void function_call(char **tok, int *status)
 		wait(status);
 	}
 }
+*/

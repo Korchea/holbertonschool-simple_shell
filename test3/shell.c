@@ -1,41 +1,55 @@
 #include "shell.h"
+extern char **environ;
 
-/*
-char *which(const char *cmd)
+/**
+ * _strncpy - Check the code.
+ * Description: 'Copies a string.'
+ * @dest: is a string.
+ * @src: is a string.
+ * @n: is an int.
+ * Return: dest.
+ */
+
+char *_strncpy(char *dest, char *src, int n)
 {
-	char *path = _getenv("PATH");
-	if (path == NULL)
-		return NULL;
+	int i, j = 0;
 
-	char *directory = strtok(path, ":");
-	while (directory != NULL)
-	{
-		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
-		if (fullpath == NULL)
-		{
-			perror("Memory allocation error");
-			exit(EXIT_FAILURE);
-		}
-
-		strcpy(fullpath, directory);
-		strcat(fullpath, "/");
-		strcat(fullpath, cmd);
-
-		struct stat st;
-		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
-			return fullpath;
-
-		free(fullpath);
-		directory = strtok(NULL, ":");
+	for (i = n; src[i] != '\0'; i++) 
+    {
+		dest[j] = src[i];
+        j++;
 	}
+	dest[j] = '\0';
+	return (dest);
+}
 
+/**
+ * 
+ */
+
+char *_getenv(char *pathname)
+{
+	int i;
+	char *envp;
+
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		if (strstr(environ[i], pathname))
+		{
+			envp = environ[i];
+			envp = _strncpy(envp, envp, 5);
+            return (envp);
+		}
+        
+	}
 	return (NULL);
 }
 
-void _witch(char **cmd)
- {
-	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
+/**
+ * 
+ */
 
+<<<<<<< HEAD
 	directory = strtok(path, ":");
 	printf("path = %s\n", path);
 	while (directory)
@@ -76,6 +90,35 @@ void _witch(char **cmd)
 	 }
  }
 */ 
+=======
+void function_call(char **tok, int *status)
+{
+	pid_t pid;
+	char *_env[2];
+	
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Error:");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		_env[0] = _getenv("PATH");
+		_env[1] = NULL;
+		execve(tok[0], tok, _env);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		wait(status);
+	}
+}
+
+/**
+ */ 
+ 
+>>>>>>> d9c8ed0a9a6f4a25df7c1cb6247d2c911bf9e521
 
 int main(void)
 {
@@ -84,19 +127,14 @@ int main(void)
     size_t size = 0;
     int i = 0, n_token = 0, line_error = 0, status;
     
-	
     while (1)
     {
-		if (isatty(STDIN_FILENO) != 1)
-			;
-		else
+		if (isatty(STDIN_FILENO) == 1)
 			printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		/*cmd = which(cmd);*/
-		/*_witch(&cmd);*/
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
@@ -132,3 +170,6 @@ int main(void)
     return (EXIT_SUCCESS);
 }
 
+
+
+/*isatty - Recurdame me tengo que marchar, recuerdame.*/

@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 /* #include "shell.h"
 /*
+=======
+#include "shell.h"
+
+/**
+>>>>>>> d9c8ed0a9a6f4a25df7c1cb6247d2c911bf9e521
  * _strncpy - Check the code.
  * Description: 'Copies a string.'
  * @dest: is a string.
@@ -47,9 +53,10 @@
  * 
  *
 
-void function_call(char **tok, int *status, char **_env)
+void function_call(char **tok, int *status)
 {
 	pid_t pid;
+	char *_env[2];
 	
 	pid = fork();
 	if (pid == -1)
@@ -59,7 +66,8 @@ void function_call(char **tok, int *status, char **_env)
 	}
 	if (pid == 0)
 	{
-		
+		_env[0] = _getenv("PATH");
+		_env[1] = NULL;
 		execve(tok[0], tok, _env);
 		exit(EXIT_SUCCESS);
 	}
