@@ -17,7 +17,7 @@ $ ./hsh
 
 
 In this project we use (((PONER NUMERO))) functions, those functions are main, _getenv, _strlen, _strncpy and function_call.
-- `int main(int argc, char **argv, char *envp[])`: It is our principal function, here we don't recive enything(((((ME QUEDE ACA))))). This function creates the list of the variables given in the ellipsis, traverses the string format, look for the conversion specifiers and prints the string format, if it recognise a % in format it call the functon get_format and it returns the number of characters printed.
+- `int main(void)`: It is our principal function, here we don't recive enything(((((ME QUEDE ACA))))). This function recives a string given from the imput, ((Lo toqueniza)) y luego se lo manda a la funcion function_call.
 - `void get_format(const char *format, va_list ap, int i, int *count)`: This function create a structure of chars and functions, look up for the conversion specifiers in the structure and if it find something it call to other function, those functions are casechar, casestring, casepercent and caseint.
 - `int casechar(va_list ap)`: In this function we print the char who is in the list and return 1 who is the number of prints.
 - `int casestring(va_list ap)`: In this function we print the string who is in the list and return the length of the string using the function _strlen.

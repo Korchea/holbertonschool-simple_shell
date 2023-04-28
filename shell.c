@@ -71,25 +71,19 @@ void _witch(char **cmd)
 
 int main(void)
 {
-    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL, *_env[3];
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
     const char *taux = " \n";
     size_t size = 0;
     int i = 0, n_token = 0, line_error = 0, status;
-	/*env_t *_env;*/
     
-	
     while (1)
     {
-		if (isatty(STDIN_FILENO) != 1)
-			;
-		else
+		if (isatty(STDIN_FILENO) == 1)
 			printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
 		fflush(stdin);
 		if (line_error == -1)
 				break;
-		/*cmd = which(cmd);*/
-		/*_witch(&cmd);*/
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
@@ -109,16 +103,14 @@ int main(void)
 			}
         tok[i] = NULL;
         free(cmd_cpy);
-		strcpy(_env[0], _getenv("PATH"));
-		_env[1] = NULL;
 		if (tok != NULL)
-			function_call(tok, &status, _env);
+			function_call(tok, &status);
 		if (tok != NULL)
-		{
-			for (i = 0; tok[i] && i <= n_token; i++)
-				free(tok[i]);
-			free(tok);
-		}
+	{
+		for (i = 0; tok[i] && i <= n_token; i++)
+			free(tok[i]);
+		free(tok);
+	}
     }
 	
     free(cmd);
