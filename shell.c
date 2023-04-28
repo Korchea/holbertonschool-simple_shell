@@ -71,7 +71,7 @@ void _witch(char **cmd)
 
 int main(void)
 {
-    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL, **_env = NULL;
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL, *_env[3];
     const char *taux = " \n";
     size_t size = 0;
     int i = 0, n_token = 0, line_error = 0, status;
@@ -109,21 +109,10 @@ int main(void)
 			}
         tok[i] = NULL;
         free(cmd_cpy);
-		_env = malloc(sizeof(char *) * 2);
-		for (i = 0; i < 2; i++)
-			{
-				_env[i] = malloc(sizeof(char) * strlen(_getenv("PATH")));
-				strcpy(_env[i], _getenv("PATH"));
-			}
+		strcpy(_env[0], _getenv("PATH"));
 		_env[1] = NULL;
 		if (tok != NULL)
 			function_call(tok, &status, _env);
-		if (_env != NULL)
-		{
-			for (i = 0; _env[i]; i++)
-				free(_env[i]);
-			free(_env);
-		}
 		if (tok != NULL)
 		{
 			for (i = 0; tok[i] && i <= n_token; i++)
