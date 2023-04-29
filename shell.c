@@ -74,16 +74,20 @@ int main(void)
 	char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
 	const char *taux = " \n";
 	size_t size = 0;
-	int i = 0, n_token = 0, line_error = 0, status;
+	int i = 0, n_token = 0, status;
 
 	while (1)
 	{
 		if (isatty(STDIN_FILENO) == 1)
 			printf("$ ");
-		line_error = getline(&cmd, &size, stdin);
+		/* line_error =  */ getline(&cmd, &size, stdin);
 		fflush(stdin);
-		if (line_error == -1)
-			break;
+		if (strcmp(cmd, "exit\n") == 0) {
+        free(cmd);
+        exit(EXIT_SUCCESS);
+    }
+		/* if (line_error == -1)
+			break; */
 		cmd_cpy = _strdup(cmd);
 		token = strtok(cmd, taux);
 		if (token == NULL)
