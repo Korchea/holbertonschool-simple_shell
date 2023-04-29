@@ -77,6 +77,7 @@ void function_call(char **tok, int *status)
 	}
 }
 
+
 /**
  * _strcpy - Check the code.
  * Descriprion: 'Copies the string pointed to by src, including the terminating
