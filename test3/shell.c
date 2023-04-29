@@ -49,69 +49,21 @@ char *_getenv(char *pathname)
  * 
  */
 
-void function_call(char **tok, int *status)
-{
-	pid_t pid;
-	
-	pid = fork();
-	if (pid == -1)
+<<<<<<< HEAD
+	directory = strtok(path, ":");
+	printf("path = %s\n", path);
+	while (directory)
 	{
-		perror("Error:");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		char *_env[] = {_getenv("PATH"), NULL};
-		execve(tok[0], tok, _env);
-		exit(EXIT_SUCCESS);
-	}
-	else
-	{
-		wait(status);
-	}
-}
-/*
-char *which(const char *cmd)
-{
-	char *path = _getenv("PATH");
-	if (path == NULL)
-		return NULL;
-
-	char *directory = strtok(path, ":");
-	while (directory != NULL)
-	{
-		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
+		fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(cmd) + 2));
 		if (fullpath == NULL)
 		{
-			perror("Memory allocation error");
-			exit(EXIT_FAILURE);
+			EXIT_FAILURE;
 		}
-
 		strcpy(fullpath, directory);
 		strcat(fullpath, "/");
 		strcat(fullpath, cmd);
-
-		struct stat st;
-		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
-			return fullpath;
-
-		free(fullpath);
-		directory = strtok(NULL, ":");
-	}
-
-	return (NULL);
-}*/
-/**
- */ 
-void _witch(char **cmd)
- {
-	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
-
-	 directory = strtok(path, ":");
-	
-	 while (directory)
-	 {
-		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(*cmd) + 2));
+		/* printf("%s", fullpath); */
+		/* stat_value = stat(fullpath, &st);
 
 		 strcpy(fullpath, directory);
 		 strcat(fullpath, "/");
@@ -137,28 +89,57 @@ void _witch(char **cmd)
 	 	free(fullpath);
 	 }
  }
+*/ 
+=======
+void function_call(char **tok, int *status)
+{
+	pid_t pid;
+	char *_env[2];
+	
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Error:");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		_env[0] = _getenv("PATH");
+		_env[1] = NULL;
+		execve(tok[0], tok, _env);
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		wait(status);
+	}
+}
 
-int main(int argc, char **argv, char *envp[])
+/**
+ */ 
+ 
+>>>>>>> d9c8ed0a9a6f4a25df7c1cb6247d2c911bf9e521
+
+int main(void)
 {
     char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
     const char *taux = " \n";
     size_t size = 0;
     int i = 0, n_token = 0, line_error = 0, status;
-	pid_t pid;
     
-	
     while (1)
     {
-		if (isatty(STDIN_FILENO) != 1)
-			;
-		else
+		if (isatty(STDIN_FILENO) == 1)
 			printf("$ ");
 		line_error = getline(&cmd, &size, stdin);
 		fflush(stdin);
 		if (line_error == -1)
 				break;
+<<<<<<< HEAD
 		//cmd = which(cmd);
 		//_witch(&cmd);
+=======
+>>>>>>> 28d8fc678909c35d3b4825119c328c3d07fca5a7
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
@@ -177,11 +158,13 @@ int main(int argc, char **argv, char *envp[])
 				token = strtok(NULL, taux);
 			}
         tok[i] = NULL;
-        free(cmd_cpy);
+        if(cmd_cpy != NULL)
+			free(cmd_cpy);
 		if (tok != NULL)
 			function_call(tok, &status);
 		if (tok != NULL)
 	{
+		
 		for (i = 0; tok[i] && i <= n_token; i++)
 			free(tok[i]);
 		free(tok);
@@ -192,3 +175,6 @@ int main(int argc, char **argv, char *envp[])
     return (EXIT_SUCCESS);
 }
 
+
+
+/*isatty - Recurdame me tengo que marchar, recuerdame.*/
