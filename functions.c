@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-/* #include "shell.h"
-/*
-=======
 #include "shell.h"
 
 /**
->>>>>>> d9c8ed0a9a6f4a25df7c1cb6247d2c911bf9e521
  * _strncpy - Check the code.
  * Description: 'Copies a string.'
  * @dest: is a string.
@@ -14,7 +9,7 @@
  * Return: dest.
  */
 
-/* char *_strncpy(char *dest, char *src, int n)
+char *_strncpy(char *dest, char *src, int n)
 {
 	int i, j = 0;
 
@@ -31,7 +26,7 @@
  * 
  */
 
-/* char *_getenv(char *pathname)
+char *_getenv(char *pathname)
 {
 	int i;
 	char *envp;
@@ -48,10 +43,10 @@
 	}
 	return (NULL);
 }
- */
+
 /**
  * 
- *
+ */
 
 void function_call(char **tok, int *status)
 {
@@ -68,16 +63,18 @@ void function_call(char **tok, int *status)
 	{
 		_env[0] = _getenv("PATH");
 		_env[1] = NULL;
+		if (tok[0] != NULL) 
+		{
 		execve(tok[0], tok, _env);
+		perror(tok[0]);
+		exit(EXIT_FAILURE);
+		}
 		exit(EXIT_SUCCESS);
 	}
 	else
 	{
 		wait(status);
 	}
-<<<<<<< HEAD
-}*/
-=======
 }
 
 /**
@@ -143,4 +140,3 @@ char *_strdup(char *str)
 		return (j);
 	}
 }
->>>>>>> e95eac92052687214bfc4bb71f2eb2abf7f1e3bd
