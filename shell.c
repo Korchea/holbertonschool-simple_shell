@@ -79,20 +79,20 @@ int main(void)
     while (1)
     {
 		if (isatty(STDIN_FILENO) == 1)
-		{	
 			printf("$ ");
-		}
-		
-			line_error = getline(&cmd, &size, stdin);
+		line_error = getline(&cmd, &size, stdin);
 		fflush(stdin);
 		if (line_error == -1)
+		{	
 			break;
-		if(cmd != NULL)
+		}
+		if(cmd == NULL)
+			free(cmd);
+		else
 		{
 		cmd_cpy = _strdup(cmd);
         token = strtok(cmd, taux);
-		}
-		n_token = 0;
+        n_token = 0;
         while (token != NULL)
 			{
 				n_token++;
@@ -100,6 +100,12 @@ int main(void)
 			}
 		n_token++;
         tok = malloc(sizeof(char *) * n_token);
+        if (tok == NULL)
+		{
+			free(cmd_cpy);
+			free(cmd);
+			return (EXIT_FAILURE);
+		}
 		token = strtok(cmd_cpy, taux);
         for (i = 0; token != NULL; i++)
 			{
@@ -108,22 +114,16 @@ int main(void)
 				token = strtok(NULL, taux);
 			}
         tok[i] = NULL;
-		/* free(cmd_cpy); */
+        free(cmd_cpy);
 		if (tok != NULL)
-        {
-		function_call(tok, &status);
-		for (i = 0; tok[i] && i <= n_token; i++)
 		{
+		function_call(tok, &status);
+		for (i = 0; tok[i] != NULL && i <= n_token; i++)
 			free(tok[i]);
-			free(cmd_cpy);
-			tok[i] = NULL;
-		}
 		free(tok);
-		tok = NULL;
-		}		
-}
-if (cmd != NULL)
+		}
+		}
+    }
 	free(cmd);
-return (EXIT_SUCCESS);
+    return (EXIT_SUCCESS);
 }
-
