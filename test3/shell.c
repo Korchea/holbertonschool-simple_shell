@@ -158,7 +158,7 @@ int main(int argc, char **argv, char *envp[])
 		if (line_error == -1)
 				break;
 		//cmd = which(cmd);
-		_witch(&cmd);
+		//_witch(&cmd);
 		cmd_cpy = strdup(cmd);
         token = strtok(cmd, taux);
         n_token = 0;
