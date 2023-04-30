@@ -1,4 +1,5 @@
-
+#ifndef __shell_h__
+#define __shell_h__
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -9,19 +10,17 @@
 #include <stdint.h>
 #include <sys/stat.h>
 #include <errno.h>
-/*
-typedef struct env_s
-{
-    char *path;
-    struct env_s *next;
-} env_t;
-*/
+
 extern char **environ;
 char *_getenv(const char *name);
 char *_strncpy(char *dest, char *src, int n);
-void _witch(char **cmd);
 char *_which(const char *cmd);
 void function_call(char **tok, int *status);
 char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
+void tokenizator(char *token, int *n_token);
+void _isatty(void);
+unsigned int _strlen(char *s);
 int main(void);
+
+#endif

@@ -1,93 +1,102 @@
 #include "shell.h"
 
-/*
-char *which(const char *cmd)
+/**
+ * _which - Looks for the path of a command.
+ * @cmd: Is a command.
+ * Return: The command with the directory.
+ */
+char *_which(const char *cmd)
 {
+	struct stat st;
+	char *directory, *cmd_cpy = NULL;
 	char *path = _getenv("PATH");
-	if (path == NULL)
-		return NULL;
 
-	char *directory = strtok(path, ":");
+	if (path == NULL)
+		return (NULL);
+	directory = strtok(path, ":");
 	while (directory != NULL)
 	{
 		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
+
 		if (fullpath == NULL)
 		{
 			perror("Memory allocation error");
 			exit(EXIT_FAILURE);
 		}
-
 		strcpy(fullpath, directory);
 		strcat(fullpath, "/");
 		strcat(fullpath, cmd);
-
-		struct stat st;
 		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
-			return fullpath;
-
+			return (fullpath);
 		free(fullpath);
 		directory = strtok(NULL, ":");
 	}
-
-	return (NULL);
+	cmd_cpy = _strdup((char *)cmd);
+	return (cmd_cpy);
 }
 
-void _witch(char **cmd)
- {
-	 char *path = _getenv("PATH"), *directory = NULL, *fullpath = NULL;
+/**
+ * _strlen - Check the code.
+ * Description: 'Returns the length of a string.'
+ * @s: Is a string.
+ * Return: Number of characters.
+ */
 
-	 directory = strtok(path, ":");
+unsigned int _strlen(char *s)
+{
+	if (*s != '\0')
+	{
+		return (1 + _strlen(s + 1));
+	}
+	return (0);
+}
 
-	 while (directory)
-	 {
-		 fullpath = malloc(sizeof(char) * (strlen(directory) + strlen(*cmd) + 2));
-		 if (fullpath == NULL)
-			exit(EXIT_FAIL)
-		 strcpy(fullpath, directory);
-		 strcat(fullpath, "/");
-		 strcat(fullpath, *cmd);
-		 printf("%s", fullpath);
-		 struct stat st = {0};
-		 if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
-		 {
-			 printf("%s\n", *cmd);
-			 free(path);
-			 *cmd = malloc(sizeof(char) * strlen(fullpath) + 1);
-			 strcpy(*cmd, fullpath);
-			 break;
-		 }
-		 else
-		 {
-			 directory = strtok(NULL, ":");
-		 }
-		 printf("stat returned %d, errno = %d\n", stat(fullpath, &st), errno);
-	 }
-	 if (fullpath != NULL)
-	 {
-		free(fullpath);
-	 }
- }
-*/
+/**
+ * tokenizator - It count the number of tokens.
+ * @token: Is the first token.
+ * @n_token: Is the number of token.
+ */
+
+void tokenizator(char *token, int *n_token)
+{
+	*n_token = 0;
+	while (token != NULL)
+	{
+		*n_token = *n_token + 1;
+		token = strtok(NULL, " \n");
+	}
+	*n_token = *n_token + 1;
+}
+
+/**
+ * _isatty - Look for the terminal.
+ */
+
+void _isatty(void)
+{
+	if (isatty(STDIN_FILENO) == 1)
+		printf("$ ");
+}
+
+/**
+ * main - Recreates a simple shell.
+ * Return: If the function end well return success.
+ */
 
 int main(void)
 {
 	char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
 	const char *taux = " \n";
 	size_t size = 0;
-	int i = 0, n_token = 0, status;
+	int i = 0, n_token = 0, line_error = 0, status;
 
 	while (1)
 	{
-		if (isatty(STDIN_FILENO) == 1)
-			printf("$ ");
-		/* line_error =  */ getline(&cmd, &size, stdin);
+		_isatty();
+		line_error = getline(&cmd, &size, stdin);
 		fflush(stdin);
-		if (strcmp(cmd, "exit\n") == 0) {
-        free(cmd);
-        exit(EXIT_SUCCESS);
-    }
-		/* if (line_error == -1)
-			break; */
+		if (line_error == -1 || strstr(cmd, "exit\n"))
+			break;
 		cmd_cpy = _strdup(cmd);
 		token = strtok(cmd, taux);
 		if (token == NULL)
@@ -95,13 +104,7 @@ int main(void)
 			free(cmd_cpy);
 			continue;
 		}
-		n_token = 0;
-		while (token != NULL)
-		{
-			n_token++;
-			token = strtok(NULL, taux);
-		}
-		n_token++;
+		tokenizator(token, &n_token);
 		tok = malloc(sizeof(char *) * n_token);
 		token = strtok(cmd_cpy, taux);
 		for (i = 0; token != NULL; i++)
@@ -113,9 +116,8 @@ int main(void)
 		tok[i] = NULL;
 		free(cmd_cpy);
 		if (tok != NULL)
-			function_call(tok, &status);
-		if (tok != NULL)
 		{
+			function_call(tok, &status);
 			for (i = 0; tok[i] && i <= n_token; i++)
 				free(tok[i]);
 			free(tok);

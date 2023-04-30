@@ -22,78 +22,32 @@ char *_strncpy(char *dest, char *src, int n)
 	return (dest);
 }
 
-/*
- *
+/**
+ * _getenv - Gets the path.
+ * @name: Is just "PATH".
+ * Return: The path.
  */
 
-char *_getenv(const char *name) {/*
+char *_getenv(const char *name)
 {
 	int i;
-	char *envp;
+	char *env_value = NULL;
 
 	for (i = 0; environ[i] != NULL; i++)
 	{
-		if (strstr(environ[i], pathname))
+		if (strncmp(name, environ[i], strlen(name)) == 0)
 		{
-			envp = environ[i];
-			envp = _strncpy(envp, envp, 5);
-			return (envp);
+			env_value = strdup(&environ[i][strlen(name) + 1]);
+			break;
 		}
 	}
-	return (NULL);
-*/	int i;
-    char *env_value = NULL;
-
-    for (i = 0; environ[i] != NULL; i++)
-    {
-        if (strncmp(name, environ[i], strlen(name)) == 0)
-        {
-            env_value = strdup(&environ[i][strlen(name) + 1]);
-            break;
-        }
-    }
-    return (env_value);
+	return (env_value);
 }
+
 /**
- *
- */
-
-#include "shell.h"
-
-char *_which(const char *cmd)
-{
-	struct stat st;
-	char *directory;
-
-	char *path = _getenv("PATH");
-	if (path == NULL)
-		return NULL;
-
-	directory = strtok(path, ":");
-	while (directory != NULL)
-	{
-		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
-		if (fullpath == NULL)
-		{
-			perror("Memory allocation error");
-			exit(EXIT_FAILURE);
-		}
-
-		strcpy(fullpath, directory);
-		strcat(fullpath, "/");
-		strcat(fullpath, cmd);
-
-		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
-			return fullpath;
-
-		free(fullpath);
-		directory = strtok(NULL, ":");
-	}
-
-	return (NULL);
-}
-/**
- *
+ * function_call - Create a child process and execute the command.
+ * @tok: Is an array of tokens.
+ * @status: Is the status of the shell.h
  */
 
 void function_call(char **tok, int *status)

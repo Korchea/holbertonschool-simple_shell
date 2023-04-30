@@ -1,8 +1,8 @@
 # Simple Shell
 
-In this function we replicate a simple command interpretor. It must resive a command, options and directions, then look it is valid, it looks for the direction of the command anthe options, if it is valid it run the command like a normal shell should do.
+In this function we replicate a simple command interpretor. It must receive a command, options and directions, then look it is valid, it looks for the direction of the command and the options, if it is valid it run the command like a normal shell should do.
 
-We can call the commands in different forms, those are using the command echo with the command in double quotation marks and two ampersant whit the executable of the shell, or we can use the executable and wait to the call of he function to write the command.
+We can call the commands in different forms, those are using the command echo with the command in double quotation marks and two ampersand with the executable of the shell, or we can use the executable and wait to the call of he function to write the command.
 
 ## Command form
 The first form: 
@@ -16,7 +16,7 @@ $ ./hsh
 ```
 
 In this project we use (((PONER NUMERO))) functions, those functions are main, _getenv, _strlen, _strncpy and function_call.
-- `int main(void)`: It is our principal function, here we don't recive enything. When the program runs, it prints a `$` to the terminal, at which point this function receives a string given from the imput, he tokenize it and then sends it to the function function_call.
+- `int main(void)`: It is our principal function, here we don't receive anything. When the program runs, it prints a `$` to the terminal, at which point this function receives a string given from the imput, it tokenizes and then sends it to the function function_call.
 - `void function_call(char **tok, int *status)`: This function creates a second process, a child process, in this process we execute the command that we have written in the main function.
 - `char *_getenv(char *pathname)`: In this function we look for information in the environment, in case we look for the path, when we get the path we call the strncpy function to cut the function and return the path in string format.
 - `char *_strncpy(char *dest, char *src, int n)`: In this we receive two strings and an integer "n", we stop at position "n" of the second string and copy each character of the second string into string 1 from "n".
