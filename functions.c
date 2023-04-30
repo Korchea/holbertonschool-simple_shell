@@ -68,6 +68,11 @@ void function_call(char **tok, int *status)
 		_env[1] = NULL;
 		if (tok[0] != NULL)
 		{
+			if (strcmp(tok[0], "env") == 0)
+			{
+				print_env();
+				exit(EXIT_SUCCESS);
+			}
 			if (strchr(tok[0], '/') != NULL)
 				execve(tok[0], tok, _env);
 			else
@@ -154,4 +159,13 @@ char *_strdup(char *str)
 		}
 		return (j);
 	}
+}
+
+void print_env(void)
+{
+    char **env = environ;
+    while(*env)
+    {
+        printf("%s\n", *env++);
+    }
 }

@@ -18,6 +18,7 @@ char *_which(const char *cmd);
 void function_call(char **tok, int *status);
 char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
+void print_env(void);
 void tokenizator(char *token, int *n_token);
 void _isatty(void);
 unsigned int _strlen(char *s);
