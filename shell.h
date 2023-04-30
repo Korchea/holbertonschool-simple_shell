@@ -1,4 +1,5 @@
-
+#ifndef __shell_h__
+#define __shell_h__
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -17,7 +18,9 @@ char *_which(const char *cmd);
 void function_call(char **tok, int *status);
 char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
-void tokenizator(char *token, int* n_token);
+void tokenizator(char *token, int *n_token);
 void _isatty(void);
 unsigned int _strlen(char *s);
 int main(void);
+
+#endif

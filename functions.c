@@ -22,65 +22,32 @@ char *_strncpy(char *dest, char *src, int n)
 	return (dest);
 }
 
-/*
- *
+/**
+ * _getenv - Gets the path.
+ * @name: Is just "PATH".
+ * Return: The path.
  */
 
 char *_getenv(const char *name)
 {
 	int i;
-    char *env_value = NULL;
+	char *env_value = NULL;
 
-    for (i = 0; environ[i] != NULL; i++)
-    {
-        if (strncmp(name, environ[i], strlen(name)) == 0)
-        {
-            env_value = strdup(&environ[i][strlen(name) + 1]);
-            break;
-        }
-    }
-    return (env_value);
-}
-/**
- *
- */
-
-#include "shell.h"
-
-char *_which(const char *cmd)
-{
-	struct stat st;
-	char *directory;
-
-	char *path = _getenv("PATH");
-	if (path == NULL)
-		return NULL;
-
-	directory = strtok(path, ":");
-	while (directory != NULL)
+	for (i = 0; environ[i] != NULL; i++)
 	{
-		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
-		if (fullpath == NULL)
+		if (strncmp(name, environ[i], strlen(name)) == 0)
 		{
-			perror("Memory allocation error");
-			exit(EXIT_FAILURE);
+			env_value = strdup(&environ[i][strlen(name) + 1]);
+			break;
 		}
-
-		strcpy(fullpath, directory);
-		strcat(fullpath, "/");
-		strcat(fullpath, cmd);
-
-		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
-			return fullpath;
-
-		free(fullpath);
-		directory = strtok(NULL, ":");
 	}
-
-	return (NULL);
+	return (env_value);
 }
+
 /**
- *
+ * function_call - Create a child process and execute the command.
+ * @tok: Is an array of tokens.
+ * @status: Is the status of the shell.h
  */
 
 void function_call(char **tok, int *status)
