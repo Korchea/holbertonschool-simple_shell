@@ -161,6 +161,11 @@ char *_strdup(char *str)
 	}
 }
 
+/**
+ * print_env - prints the current enviroment variable.
+ * Return: void. 
+*/
+
 void print_env(void)
 {
     char **env = environ;
