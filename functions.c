@@ -13,17 +13,17 @@ char *_strncpy(char *dest, char *src, int n)
 {
 	int i, j = 0;
 
-	for (i = n; src[i] != '\0'; i++) 
-    {
+	for (i = n; src[i] != '\0'; i++)
+	{
 		dest[j] = src[i];
-        j++;
+		j++;
 	}
 	dest[j] = '\0';
 	return (dest);
 }
 
 /*
- * 
+ *
  */
 
 char *_getenv(const char *name)
@@ -41,9 +41,46 @@ char *_getenv(const char *name)
     }
     return (env_value);
 }
-
 /**
- * 
+ *
+ */
+
+#include "shell.h"
+
+char *_which(const char *cmd)
+{
+	struct stat st;
+	char *directory;
+
+	char *path = _getenv("PATH");
+	if (path == NULL)
+		return NULL;
+
+	directory = strtok(path, ":");
+	while (directory != NULL)
+	{
+		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
+		if (fullpath == NULL)
+		{
+			perror("Memory allocation error");
+			exit(EXIT_FAILURE);
+		}
+
+		strcpy(fullpath, directory);
+		strcat(fullpath, "/");
+		strcat(fullpath, cmd);
+
+		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
+			return fullpath;
+
+		free(fullpath);
+		directory = strtok(NULL, ":");
+	}
+
+	return (NULL);
+}
+/**
+ *
  */
 
 void function_call(char **tok, int *status)
