@@ -114,16 +114,21 @@ void function_call(char **tok, int *status)
 		_env[1] = NULL;
 		if (tok[0] != NULL)
 		{
-			full_path = _which(tok[0]);
-			if (full_path == NULL)
+			if (strchr(tok[0], '/') != NULL)
+				execve(tok[0], tok, _env);
+			else
 			{
-				fprintf(stderr, "%s: command not found\n", tok[0]);
+				full_path = _which(tok[0]);
+				if (full_path == NULL)
+				{
+					fprintf(stderr, "%s: command not found\n", tok[0]);
+					exit(EXIT_FAILURE);
+				}
+				execve(full_path, tok, _env);
+				perror(full_path);
+				free(full_path);
 				exit(EXIT_FAILURE);
 			}
-			execve(full_path, tok, _env);
-			perror(full_path);
-			free(full_path);
-			exit(EXIT_FAILURE);
 		}
 		exit(EXIT_SUCCESS);
 	}
