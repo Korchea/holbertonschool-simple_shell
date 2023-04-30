@@ -52,11 +52,9 @@ char *_getenv(const char *name)
 
 void function_call(char **tok, int *status)
 {
-	pid_t pid;
-	char *_env[2];
-	char *full_path;
+	pid_t pid = fork();
+	char *_env[2], *full_path;
 
-	pid = fork();
 	if (pid == -1)
 	{
 		perror("Error:");
@@ -92,85 +90,19 @@ void function_call(char **tok, int *status)
 		exit(EXIT_SUCCESS);
 	}
 	else
-	{
 		wait(status);
-	}
 }
 
 /**
- * _strcpy - Check the code.
- * Descriprion: 'Copies the string pointed to by src, including the terminating
- * null byte (\0), to the buffer pointed to by dest.'
- * @dest: is a string.
- * @src: is a string.
- * Return: the pointer to dest.
+ * print_env - Prints the current enviroment variable.
  */
-
-char *_strcpy(char *dest, char *src)
-{
-	int i;
-
-	i = 0;
-	while (i >= 0)
-	{
-		*(dest + i) = *(src + i);
-		if (*(src + i) == '\0')
-		{
-			break;
-		}
-		i++;
-	}
-	return (dest);
-}
-
-/**
- * _strdup - Check the code.
- * Description: 'Returns a pointer to a newly allocated space in memory,
- * which contains a copy of the string given as  parameter.'
- * @str: Is a string.
- * Return: NULL if str = NULL or if insufficient memory was availble,
- * else a pointer to the duplicate string.
- */
-
-char *_strdup(char *str)
-{
-	int i, k;
-	char *j;
-
-	if (str == NULL)
-	{
-		return (NULL);
-	}
-	else
-	{
-		i = 0;
-		while (str[i] != '\0')
-		{
-			i++;
-		}
-		j = malloc(sizeof(char) * (i + 1));
-		if (j == NULL)
-		{
-			exit(1);
-		}
-		for (k = 0; k < i + 1; k++)
-		{
-			j[k] = str[k];
-		}
-		return (j);
-	}
-}
-
-/**
- * print_env - prints the current enviroment variable.
- * Return: void. 
-*/
 
 void print_env(void)
 {
-    char **env = environ;
-    while(*env)
-    {
-        printf("%s\n", *env++);
-    }
+	char **env = environ;
+
+	while (*env)
+	{
+		printf("%s\n", *env++);
+	}
 }
