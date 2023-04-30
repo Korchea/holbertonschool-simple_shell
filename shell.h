@@ -17,9 +17,10 @@ typedef struct env_s
 } env_t;
 */
 extern char **environ;
-char *_getenv(char *pathname);
+char *_getenv(const char *name);
 char *_strncpy(char *dest, char *src, int n);
 void _witch(char **cmd);
+char *_which(const char *cmd);
 void function_call(char **tok, int *status);
 char *_strcpy(char *dest, char *src);
 char *_strdup(char *str);
