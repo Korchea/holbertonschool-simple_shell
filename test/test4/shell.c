@@ -103,22 +103,49 @@ char *_strncpy(char *dest, char *src, int n)
  * 
  */
 
-char *_getenv(char *pathname)
+char *_getenv(const char *name)
 {
 	int i;
-	char *envp;
+    char *env_value = NULL;
 
-	for (i = 0; environ[i] != NULL; i++)
+    for (i = 0; environ[i] != NULL; i++)
+    {
+        if (strncmp(name, environ[i], strlen(name)) == 0)
+        {
+            env_value = strdup(&environ[i][strlen(name) + 1]);
+            break;
+        }
+    }
+    return (env_value);
+}
+
+char *_which(const char *cmd)
+{
+	struct stat st;
+	char *directory, *cmd_cpy = NULL;
+
+	char *path = _getenv("PATH");
+	if (path == NULL)
+		return NULL;
+	directory = strtok(path, ":");
+	while (directory != NULL)
 	{
-		if (strstr(environ[i], pathname))
+		char *fullpath = malloc(strlen(directory) + strlen(cmd) + 2);
+		if (fullpath == NULL)
 		{
-			envp = environ[i];
-			envp = _strncpy(envp, envp, 5);
-            return (envp);
+			perror("Memory allocation error");
+			exit(EXIT_FAILURE);
 		}
-        
+		strcpy(fullpath, directory);
+		strcat(fullpath, "/");
+		strcat(fullpath, cmd);
+		if (stat(fullpath, &st) == 0 && S_ISREG(st.st_mode))
+			return fullpath;
+		free(fullpath);
+		directory = strtok(NULL, ":");
 	}
-	return (NULL);
+	cmd_cpy = _strdup(cmd);
+	return (cmd_cpy);
 }
 
 /**
@@ -129,7 +156,8 @@ void function_call(char **tok, int *status)
 {
 	pid_t pid;
 	char *_env[2];
-	
+	char *full_path;
+
 	pid = fork();
 	if (pid == -1)
 	{
@@ -140,11 +168,18 @@ void function_call(char **tok, int *status)
 	{
 		_env[0] = _getenv("PATH");
 		_env[1] = NULL;
-		if (tok[0] != NULL) 
+		if (tok[0] != NULL)
 		{
-		execve(tok[0], tok, _env);
-		perror(tok[0]);
-		exit(EXIT_FAILURE);
+			full_path = _which(tok[0]);
+			if (full_path == NULL)
+			{
+				fprintf(stderr, "%s: command not found\n", tok[0]);
+				exit(EXIT_FAILURE);
+			}
+			execve(full_path, tok, _env);
+			perror(full_path);
+			free(full_path);
+			exit(EXIT_FAILURE);
 		}
 		exit(EXIT_SUCCESS);
 	}
@@ -218,54 +253,63 @@ char *_strdup(char *str)
 	}
 }
 
+void tokenizator(char *token, int* n_token)
+{
+	
+		*n_token = 0;
+		while (token != NULL)
+		{
+			*n_token = *n_token + 1;
+			token = strtok(NULL, " \n");
+		}
+		*n_token = *n_token + 1;
+}
+
+void _isatty(void)
+{
+	if (isatty(STDIN_FILENO) == 1)
+		printf("$ ");
+}
+
+
 int main(void)
 {
-	char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
-	const char *taux = " \n";
-	size_t size = 0;
-	int i = 0, n_token = 0, line_error = 0, status;
-
-	while (1)
-	{
-		if (isatty(STDIN_FILENO) == 1)
-			printf("$ ");
-		line_error = getline(&cmd, &size, stdin);
-		fflush(stdin);
-		if (line_error == -1)
-			break;
-		cmd_cpy = _strdup(cmd);
-		token = strtok(cmd, taux);
+    char *cmd = NULL, *cmd_cpy = NULL, *token = NULL, **tok = NULL;
+    const char *taux = " \n"; size_t size = 0;
+    int i = 0, n_token = 0, line_error = 0, status;
+    
+    while (1)
+    {
+		_isatty();
+		line_error = getline(&cmd, &size, stdin); fflush(stdin);
+		if (line_error == -1 || strstr(cmd, "exit\n"))
+				break;
+		cmd_cpy = _strdup(cmd);token = strtok(cmd, taux);
 		if (token == NULL)
 		{
 			free(cmd_cpy);
 			continue;
 		}
-		n_token = 0;
-		while (token != NULL)
-		{
-			n_token++;
-			token = strtok(NULL, taux);
-		}
-		n_token++;
-		tok = malloc(sizeof(char *) * n_token);
-		token = strtok(cmd_cpy, taux);
-		for (i = 0; token != NULL; i++)
-		{
-			tok[i] = malloc(sizeof(char) * (strlen(token) + 1));
-			_strcpy(tok[i], token);
-			token = strtok(NULL, taux);
-		}
-		tok[i] = NULL;
-		free(cmd_cpy);
+		tokenizator(token, &n_token);
+        tok = malloc(sizeof(char *) * n_token);
+        token = strtok(cmd_cpy, taux);
+        for (i = 0; token != NULL; i++)
+			{
+				tok[i] = malloc(sizeof(char) * (strlen(token) + 1));
+				_strcpy(tok[i], token);
+				token = strtok(NULL, taux);
+			}
+        tok[i] = NULL; free(cmd_cpy);
 		if (tok != NULL)
 			function_call(tok, &status);
 		if (tok != NULL)
-		{
-			for (i = 0; tok[i] && i <= n_token; i++)
-				free(tok[i]);
-			free(tok);
-		}
+	{
+		for (i = 0; tok[i] && i <= n_token; i++)
+			free(tok[i]);
+		free(tok);
 	}
-	free(cmd);
-	return (EXIT_SUCCESS);
+    }
+    free(cmd);
+    return (EXIT_SUCCESS);
 }
+
